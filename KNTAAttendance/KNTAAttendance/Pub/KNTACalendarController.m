@@ -42,6 +42,7 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"详细数据";
     
     [self configureUI];
     [self configureData];
@@ -65,9 +66,12 @@
             [self.indicatorView stopAnimating];
             self.view.userInteractionEnabled = YES;
             [self.collectionView reloadData];
-            if (self.dataArray.count) {
-                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:((KNTAMonthModel *)self.dataArray.lastObject).calendarArray.count - 1 inSection:self.dataArray.count - 1] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.dataArray.count && self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
+                    //                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:((KNTAMonthModel *)self.dataArray.lastObject).calendarArray.count - 1 inSection:self.dataArray.count - 1] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+                    [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height - self.collectionView.frame.size.height) animated:NO];
+                }
+            });
         });
     });
 }

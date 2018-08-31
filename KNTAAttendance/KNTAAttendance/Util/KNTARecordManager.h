@@ -10,8 +10,8 @@
 
 #define kStandardUptime @"09:00"
 
-#define kStartTime [NSDate dateWithTimeIntervalSince1970:1532826729]
-//#define kStartTime [[NSUserDefaults standardUserDefaults] objectForKey:@"KNTAAttendanceStartTime"];
+//#define kStartTime [NSDate dateWithTimeIntervalSince1970:1532826729]
+#define kStartTime [[NSUserDefaults standardUserDefaults] objectForKey:@"KNTAAttendanceStartTime"];
 #define kSetStartTime if (![[NSUserDefaults standardUserDefaults] objectForKey:@"KNTAAttendanceStartTime"]) {\
                                 [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"KNTAAttendanceStartTime"];\
                             }
