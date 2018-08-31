@@ -16,4 +16,6 @@
 
 + (BOOL)updateData:(NSString *)entityName limit:(NSUInteger)limit handle:(void(^)(NSArray *array))handle predicate:(NSString *)format,...;
 
++ (BOOL)deleteData:(NSString *)entityName predicate:(NSString *)format,...;
+
 @end

@@ -35,4 +35,6 @@ typedef NS_ENUM(NSUInteger, E_DEALOFFTYPE) {
 
 + (void)updateDataType:(E_INSERTTYPE)eType date:(NSDate *)date handle:(E_DEALOFFTYPE(^)(void))handle updateHandle:(void(^)(id obj))updateHandle predicate:(NSString *)format,...;
 
++ (void)deleteD:(NSDate *)date;
+
 @end

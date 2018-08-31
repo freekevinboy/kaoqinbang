@@ -15,4 +15,6 @@
 
 @property (copy, nonatomic) void(^editHandle)(E_INSERTTYPE type, NSDate *date);
 
+@property (copy, nonatomic) void(^clearHandle)(NSDate *date);
+
 @end

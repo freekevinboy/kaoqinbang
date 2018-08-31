@@ -195,6 +195,21 @@ static int maxCount = 0;
     return [KNTADBManager objFromDB:@"KNTADayData" limit:limitSize predicate:message];
 }
 
++ (void)deleteD:(NSDate *)date
+{
+    KNTARecordManager *recordManager = [KNTARecordManager sharedInstance];
+    
+    recordManager.dateFormatter.dateFormat = @"yyyy";
+    NSString *year = [recordManager.dateFormatter stringFromDate:date];
+    recordManager.dateFormatter.dateFormat = @"MM";
+    NSString *month = [recordManager.dateFormatter stringFromDate:date];
+    recordManager.dateFormatter.dateFormat = @"dd";
+    NSString *day = [recordManager.dateFormatter stringFromDate:date];
+    
+    NSString *param = [NSString stringWithFormat:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", year, month, day];
+    [KNTADBManager deleteData:@"KNTADayData" predicate:param];
+}
+
 //
 + (int64_t)overTime:(KNTADayData *)dayData offDate:(NSDate *)offDate
 {

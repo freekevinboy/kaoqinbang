@@ -272,6 +272,11 @@
             [self shadowViewTapped:nil];
             [self configureData];
         };
+        editView.clearHandle = ^(NSDate *date) {
+            [KNTARecordManager deleteD:date];
+            [self shadowViewTapped:nil];
+            [self configureData];
+        };
         [self.view addSubview:editView];
         
         [UIView animateWithDuration:0.25 animations:^{

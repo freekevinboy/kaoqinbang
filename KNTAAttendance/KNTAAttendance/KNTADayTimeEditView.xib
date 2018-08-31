@@ -39,11 +39,37 @@
                                 <action selector="sureButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="3wp-13-Cqh"/>
                             </connections>
                         </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y8X-MK-2F6">
+                            <rect key="frame" x="0.0" y="43.5" width="375" height="0.5"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="0.5" id="ljE-gR-5fr"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPn-Xk-FM0">
+                            <rect key="frame" x="242" y="0.0" width="59" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="59" id="BkL-9D-hfB"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="清除">
+                                <color key="titleColor" red="0.21960784310000001" green="0.69803921570000005" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="clearData:" destination="iN0-l3-epB" eventType="touchUpInside" id="Ie6-ng-Z1j"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="0EN-e0-0ag" secondAttribute="trailing" id="0mz-vf-iEU"/>
+                        <constraint firstAttribute="bottom" secondItem="hPn-Xk-FM0" secondAttribute="bottom" id="BqZ-EM-4W6"/>
                         <constraint firstAttribute="bottom" secondItem="0EN-e0-0ag" secondAttribute="bottom" id="GDW-hI-C8g"/>
                         <constraint firstItem="0EN-e0-0ag" firstAttribute="top" secondItem="8PK-5h-HJz" secondAttribute="top" id="TPH-nd-rcG"/>
+                        <constraint firstAttribute="trailing" secondItem="Y8X-MK-2F6" secondAttribute="trailing" id="W7y-ox-SoR"/>
+                        <constraint firstItem="0EN-e0-0ag" firstAttribute="leading" secondItem="hPn-Xk-FM0" secondAttribute="trailing" constant="15" id="ZnP-TH-W97"/>
+                        <constraint firstItem="hPn-Xk-FM0" firstAttribute="top" secondItem="8PK-5h-HJz" secondAttribute="top" id="mio-73-GdX"/>
+                        <constraint firstItem="Y8X-MK-2F6" firstAttribute="leading" secondItem="8PK-5h-HJz" secondAttribute="leading" id="nlt-lw-N9M"/>
+                        <constraint firstAttribute="bottom" secondItem="Y8X-MK-2F6" secondAttribute="bottom" id="pnF-36-e6O"/>
                     </constraints>
                 </view>
             </subviews>

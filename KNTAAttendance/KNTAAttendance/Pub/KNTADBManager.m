@@ -87,4 +87,29 @@ static KNTADBManager *manager = nil;
     return NO;
 }
 
++ (BOOL)deleteData:(NSString *)entityName predicate:(NSString *)format,...
+{
+    __block NSManagedObjectContext *context = nil;
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            context = ((AppDelegate *)[UIApplication sharedApplication].delegate).persistentContainer.viewContext;
+        });
+    } else {
+        context = ((AppDelegate *)[UIApplication sharedApplication].delegate).persistentContainer.viewContext;
+    }
+    
+    NSArray *array = [self objFromDB:entityName limit:MAXBSIZE predicate:format];
+    for (id obj in array) {
+        [context deleteObject:obj];
+    }
+    
+    NSError *error = nil;
+    if ([context save:&error]) {
+        return YES;
+    }
+    return NO;
+}
+
+
+
 @end

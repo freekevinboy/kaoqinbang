@@ -193,4 +193,21 @@
 }
 
 
+- (IBAction)clearData:(UIButton *)sender
+{
+    if (self.clearHandle) {
+        NSString *year = [_yearArray objectAtIndex:[_pickView selectedRowInComponent:1]];
+        NSInteger month = [_pickView selectedRowInComponent:2] + 1;
+        NSInteger day = [_pickView selectedRowInComponent:3] + 1;
+        
+        NSString *dateString = [NSString stringWithFormat:@"%@-%ld-%ld", year, month, day];
+        self.dateFormatter.dateFormat = @"yyyy年-MM-dd";
+        NSDate *date = [self.dateFormatter dateFromString:dateString];
+        
+        self.clearHandle(date);
+    }
+}
+
+
+
 @end
