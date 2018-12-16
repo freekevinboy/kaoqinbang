@@ -13,6 +13,7 @@
 #import "KNTADayTimeEditView.h"
 #import "KNTADayData+CoreDataClass.h"
 #import "KNTABasicSetting.h"
+#import "KNTAPubDefine.h"
 
 #define KISIphoneX (CGSizeEqualToSize(CGSizeMake(375.f, 812.f), [UIScreen mainScreen].bounds.size) || CGSizeEqualToSize(CGSizeMake(812.f, 375.f), [UIScreen mainScreen].bounds.size))
 
@@ -45,10 +46,10 @@
     self.title = @"详细数据";
     
     [self configureUI];
-    [self configureData];
+    [self configureData:YES];
 }
 
-- (void)configureData
+- (void)configureData:(BOOL)scrollToEnd
 {
     if (!self.indicatorView) {
         self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -66,12 +67,13 @@
             [self.indicatorView stopAnimating];
             self.view.userInteractionEnabled = YES;
             [self.collectionView reloadData];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.dataArray.count && self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
+            [self.collectionView layoutIfNeeded];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+                if (scrollToEnd && self.dataArray.count && self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
                     //                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:((KNTAMonthModel *)self.dataArray.lastObject).calendarArray.count - 1 inSection:self.dataArray.count - 1] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-                    [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height - self.collectionView.frame.size.height) animated:YES];
+                    [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height - self.collectionView.frame.size.height) animated:NO];
                 }
-            });
+//            });
         });
     });
 }
@@ -245,6 +247,11 @@
         NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:fuzzyPoint];
         KNTAMonthModel *monthModel = _dataArray[indexPath.section];
         KNTACalendarModel *model = monthModel.calendarArray[indexPath.row];
+        
+        if (!model.day.length) {
+            return;
+        }
+        
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd";
         NSDate *date = [formatter dateFromString:[NSString stringWithFormat:@"%@-%@-%@", model.year, model.month, model.day]];
@@ -270,12 +277,12 @@
                                     predicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", model.year, model.month, model.day];
             
             [self shadowViewTapped:nil];
-            [self configureData];
+            [self configureData:NO];
         };
         editView.clearHandle = ^(NSDate *date) {
             [KNTARecordManager deleteD:date];
             [self shadowViewTapped:nil];
-            [self configureData];
+            [self configureData:NO];
         };
         [self.view addSubview:editView];
         
@@ -300,12 +307,17 @@
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:fuzzyPoint];
     KNTAMonthModel *monthModel = _dataArray[indexPath.section];
     KNTACalendarModel *model = monthModel.calendarArray[indexPath.row];
+    
+    if (!model.day.length) {
+        return;
+    }
+    
     [KNTARecordManager updateDataType:0
                                  date:[NSDate date]
                                handle:nil
                          updateHandle:^(id obj) {
                              ((KNTADayData *)obj).isInclude = !((KNTADayData *)obj).isInclude;
-                             [self configureData];
+                             [self configureData:NO];
                          }
                             predicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", model.year, model.month, model.day];
 }

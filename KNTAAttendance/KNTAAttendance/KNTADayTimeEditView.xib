@@ -88,7 +88,7 @@
             <connections>
                 <outlet property="pickView" destination="US5-zd-bEj" id="Wed-c4-UDI"/>
             </connections>
-            <point key="canvasLocation" x="-261.5" y="-24.5"/>
+            <point key="canvasLocation" x="-594" y="-7"/>
         </view>
     </objects>
 </document>

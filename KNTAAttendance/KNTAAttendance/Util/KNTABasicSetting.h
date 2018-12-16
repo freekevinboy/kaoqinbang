@@ -22,6 +22,7 @@
 
 @property (assign, nonatomic) BOOL doubleClickForEdit;
 
+@property (assign, nonatomic) BOOL promptWithoutUptime;
 
 
 @end

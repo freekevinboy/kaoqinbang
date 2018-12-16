@@ -27,13 +27,15 @@ static KNTABasicSetting *setting = nil;
         
         NSString *standard = K_OFFMOMENT_STANDARD_STORAGE;
         if (!standard.length) {
-            K_SET_OFFMOMENT_STANDARD_STORAGE(@"19:00");
+            K_SET_OFFMOMENT_STANDARD_STORAGE(kStartOverMoment);
         }
         _dayStandardOvertimeStartMoment = K_OFFMOMENT_STANDARD_STORAGE;
         _dayRedOffMoment = K_OFFMOMENT_RED_DAY_STORAGE;
         _monthRedOffMoment = K_OFFMOMENT_RED_MONTH_STORAGE;
         id obj = K_MOMENTJOINACCOCULATE_STORAGE;
         _doubleClickForEdit = [obj boolValue];
+        id propmtObj = K_ISPROMPTWITHOUTUPTIME_STORAGE;
+        _promptWithoutUptime = [propmtObj intValue] == 1 || !propmtObj;
         
     }
     return self;

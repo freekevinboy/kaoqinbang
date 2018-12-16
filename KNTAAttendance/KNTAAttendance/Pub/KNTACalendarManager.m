@@ -11,6 +11,7 @@
 #import "KNTADayData+CoreDataProperties.h"
 #import "KNTARecordManager.h"
 #import "KNTABasicSetting.h"
+#import "KNTAPubDefine.h"
 
 @interface KNTACalendarManager ()
 

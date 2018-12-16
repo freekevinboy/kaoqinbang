@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Bang-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
@@ -82,7 +82,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="MyO-AI-eBE">
+                    <navigationItem key="navigationItem" title="Bang" id="MyO-AI-eBE">
                         <barButtonItem key="rightBarButtonItem" image="setting.png" id="Uid-9g-2k0">
                             <connections>
                                 <action selector="settingButtonClicked:" destination="BYZ-38-t0r" id="V7m-Zu-cbj"/>

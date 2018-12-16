@@ -11,6 +11,7 @@
 #import "KNTADayData+CoreDataProperties.h"
 #import <malloc/malloc.h>
 #import "KNTABasicSetting.h"
+#import "KNTAPubDefine.h"
 
 @interface KNTARecordManager ()
 
@@ -221,7 +222,7 @@ static int maxCount = 0;
 
     recordManager.dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
     
-    NSString *upDateString = [NSString stringWithFormat:@"%@-%@-%@ %@", dayData.year, dayData.month, dayData.day, [KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment];
+    NSString *upDateString = [NSString stringWithFormat:@"%@-%@-%@ %@", dayData.year, dayData.month, dayData.day, kStartOverMoment];
     NSDate *upDate = [recordManager.dateFormatter dateFromString:upDateString];
     
     if ([upDate compare:offDate] != NSOrderedAscending) {

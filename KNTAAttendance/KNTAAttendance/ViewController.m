@@ -10,6 +10,8 @@
 #import "KNTACalendarController.h"
 #import "KNTARecordManager.h"
 #import "KNTASettingViewController.h"
+#import "KNTABasicSetting.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface ViewController ()<KNTACalendarUpdateMomentDlegate>
 
@@ -38,6 +40,7 @@
                                handle:nil
                          updateHandle:nil
                             predicate:nil];
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 - (void)updateOffMoment:(NSDate *)date
@@ -46,32 +49,36 @@
                                  date:date
                                handle:^E_DEALOFFTYPE{
                                    
-                                   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-                                   
                                    __block E_DEALOFFTYPE type = eTypeCurrentDay;
                                    
-                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                   if ([KNTABasicSetting sharedInstance].promptWithoutUptime == YES) {
+                                       dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           
+                                           UIAlertController *ctrl = [UIAlertController alertControllerWithTitle:@"提示" message:@"当天没有上班数据" preferredStyle:UIAlertControllerStyleAlert];
+                                           [ctrl addAction:[UIAlertAction actionWithTitle:@"同步到最近有上班数据的一天" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                               type = eTypeLastUp;
+                                               dispatch_semaphore_signal(semaphore);
+                                               AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                                           }]];
+                                           [ctrl addAction:[UIAlertAction actionWithTitle:@"就是没有上班数据" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                               type = eTypeCurrentDay;
+                                               dispatch_semaphore_signal(semaphore);
+                                               AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                                           }]];
+                                           
+                                           [self presentViewController:ctrl animated:NO completion:nil];
+                                           
+                                       });
                                        
-                                       UIAlertController *ctrl = [UIAlertController alertControllerWithTitle:@"提示" message:@"当天没有上班数据" preferredStyle:UIAlertControllerStyleAlert];
-                                       [ctrl addAction:[UIAlertAction actionWithTitle:@"同步到最近有上班数据的一天" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                                           type = eTypeLastUp;
-                                           dispatch_semaphore_signal(semaphore);
-                                       }]];
-                                       [ctrl addAction:[UIAlertAction actionWithTitle:@"就是没有上班数据" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                                           type = eTypeCurrentDay;
-                                           dispatch_semaphore_signal(semaphore);
-                                       }]];
-                                       
-                                       [self presentViewController:ctrl animated:NO completion:nil];
-                                       
-                                   });
-                                   
-                                   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                                       dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                                   }
                                    
                                    return type;
                                }
                          updateHandle:nil
                             predicate:nil];
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 

@@ -12,6 +12,8 @@
 
 @interface KNTASettingViewController ()
 
+
+
 @property (strong, nonatomic) IBOutlet UITextField *dayRedHourTextF;
 @property (strong, nonatomic) IBOutlet UITextField *dayRedMinuteTextF;
 @property (strong, nonatomic) IBOutlet UITextField *dayStandardHourTextF;
@@ -21,6 +23,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *monthRedMinuteTextF;
 
 @property (strong, nonatomic) IBOutlet UISwitch *includeSwitch;
+
+@property (strong, nonatomic) IBOutlet UISwitch *propmtWithoutUpTime;
 
 @end
 
@@ -45,6 +49,9 @@
     
     NSNumber *include = K_MOMENTJOINACCOCULATE_STORAGE;
     self.includeSwitch.on = include.boolValue;
+    
+    NSNumber *propmt = K_ISPROMPTWITHOUTUPTIME_STORAGE;
+    self.propmtWithoutUpTime.on = propmt.intValue == 1 || propmt == 0;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -79,6 +86,11 @@
     NSNumber *boolObj = [NSNumber numberWithBool:_includeSwitch.isOn];
     K_SET_MOMENTJOINACCOCULATE_STORAGE(boolObj);
     [KNTABasicSetting sharedInstance].doubleClickForEdit = _includeSwitch.isOn;
+    
+    int value = _propmtWithoutUpTime.isOn ? 1 : 2;
+    NSNumber *isPrompt = [NSNumber numberWithInt:value];
+    K_SET_ISPROMPTWITHOUTUPTIME_STORAGE(isPrompt);
+    [KNTABasicSetting sharedInstance].promptWithoutUptime = _propmtWithoutUpTime.isOn;
     
     [self.navigationController popViewControllerAnimated:YES];
 }
