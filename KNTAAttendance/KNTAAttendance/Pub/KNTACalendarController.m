@@ -11,9 +11,11 @@
 #import "KNTAMonthModel.h"
 #import "KNTARecordManager.h"
 #import "KNTADayTimeEditView.h"
+#import "KNTANextDayEditView.h"
 #import "KNTADayData+CoreDataClass.h"
 #import "KNTABasicSetting.h"
 #import "KNTAPubDefine.h"
+#import "KNTANextManager.h"
 
 #define KISIphoneX (CGSizeEqualToSize(CGSizeMake(375.f, 812.f), [UIScreen mainScreen].bounds.size) || CGSizeEqualToSize(CGSizeMake(812.f, 375.f), [UIScreen mainScreen].bounds.size))
 
@@ -68,12 +70,9 @@
             self.view.userInteractionEnabled = YES;
             [self.collectionView reloadData];
             [self.collectionView layoutIfNeeded];
-//            dispatch_async(dispatch_get_main_queue(), ^{
                 if (scrollToEnd && self.dataArray.count && self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
-                    //                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:((KNTAMonthModel *)self.dataArray.lastObject).calendarArray.count - 1 inSection:self.dataArray.count - 1] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
                     [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height - self.collectionView.frame.size.height) animated:NO];
                 }
-//            });
         });
     });
 }
@@ -152,11 +151,12 @@
         label.font = [UIFont systemFontOfSize:9.0];
         [cell.contentView addSubview:label];
     }
-    NSString *text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@", kNilToEmpty(model.day), kNilToEmpty(subTitle), isInclude, kNilToEmpty(model.upMoment), kNilToEmpty(model.offMoment), kNilToEmpty(model.overTime)];
+    NSString *offTimeStr = model.offMoment ? kNilToEmpty(model.offMoment) : kNilToEmpty(model.targetOffMoment);
+    NSString *text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@\n%@", kNilToEmpty(model.day), kNilToEmpty(subTitle), isInclude, kNilToEmpty(model.upMoment), offTimeStr, kNilToEmpty(model.overTime)];
     NSRange titleRange = [text rangeOfString:kNilToEmpty(model.day)];
     NSRange subTitleRange = [text rangeOfString:kNilToEmpty(subTitle)];
     NSRange upTimeRange = [text rangeOfString:kNilToEmpty(model.upMoment)];
-    NSRange offTimeRange = [text rangeOfString:kNilToEmpty(model.offMoment)];
+    NSRange offTimeRange = model.offMoment ? [text rangeOfString:kNilToEmpty(model.offMoment)] : [text rangeOfString:kNilToEmpty(model.targetOffMoment)];
     NSRange overTimeRange = [text rangeOfString:kNilToEmpty(model.overTime)];
 
     NSMutableAttributedString *attText = [[NSMutableAttributedString alloc] initWithString:text];
@@ -169,6 +169,16 @@
     
     if (model.isInclude && [self isOverStandard:[KNTABasicSetting sharedInstance].dayRedOffMoment date:model.offMoment overTime:model.overTime]) {
         [attText addAttributes:@{NSForegroundColorAttributeName: [UIColor redColor]} range:offTimeRange];
+    }
+    
+    if (!model.offMoment) {
+        [attText addAttributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:203.0/255.0 green:203.0/255.0 blue:203.0/255.0 alpha:1.0]} range:offTimeRange];
+        [attText addAttributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:203.0/255.0 green:203.0/255.0 blue:203.0/255.0 alpha:1.0]} range:overTimeRange];
+    }
+    
+    //超过今天的,特殊处理
+    if ([self isOverToday:model]) {
+        [attText addAttributes:@{NSForegroundColorAttributeName: [UIColor colorWithRed:203.0/255.0 green:203.0/255.0 blue:203.0/255.0 alpha:1.0]} range:NSMakeRange(0, attText.length)];
     }
     
     label.attributedText = attText;
@@ -266,24 +276,38 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shadowViewTapped:)];
         [view addGestureRecognizer:tap];
         
-        KNTADayTimeEditView *editView = [[NSBundle mainBundle] loadNibNamed:@"KNTADayTimeEditView" owner:view options:nil].lastObject;
-        editView.frame = CGRectMake(0, kScreenSize.height + 150, kScreenSize.width, 150);
-        editView.date = date;
-        editView.editHandle = ^(E_INSERTTYPE type, NSDate *date) {
-            [KNTARecordManager updateDataType:type
-                                         date:date
-                                       handle:nil
-                                 updateHandle:nil
-                                    predicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", model.year, model.month, model.day];
-            
-            [self shadowViewTapped:nil];
-            [self configureData:NO];
-        };
-        editView.clearHandle = ^(NSDate *date) {
-            [KNTARecordManager deleteD:date];
-            [self shadowViewTapped:nil];
-            [self configureData:NO];
-        };
+        UIView *editView = nil;
+        
+        if (![self isOverToday:model]) {
+            editView = [[NSBundle mainBundle] loadNibNamed:@"KNTADayTimeEditView" owner:view options:nil].lastObject;
+            editView.frame = CGRectMake(0, kScreenSize.height + 150, kScreenSize.width, 150);
+            ((KNTADayTimeEditView *)editView).date = date;
+            ((KNTADayTimeEditView *)editView).editHandle = ^(E_INSERTTYPE type, NSDate *date) {
+                [KNTARecordManager updateDataType:type
+                                             date:date
+                                           handle:nil
+                                     updateHandle:nil
+                                        predicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", model.year, model.month, model.day];
+                
+                [self shadowViewTapped:nil];
+                [self configureData:NO];
+            };
+            ((KNTADayTimeEditView *)editView).clearHandle = ^(NSDate *date) {
+                [KNTARecordManager deleteD:date];
+                [self shadowViewTapped:nil];
+                [self configureData:NO];
+            };
+        } else {
+            editView = [[NSBundle mainBundle] loadNibNamed:@"KNTANextDayEditView" owner:view options:nil].lastObject;
+            editView.frame = CGRectMake(0, kScreenSize.height + 150, kScreenSize.width, 150);
+            ((KNTANextDayEditView *)editView).editDate = date;
+            ((KNTANextDayEditView *)editView).sureHandle = ^(BOOL isWorkday) {
+                [KNTANextManager updateData:!isWorkday date:date];
+                [self shadowViewTapped:nil];
+                [self configureData:NO];
+            };
+        }
+        
         [self.view addSubview:editView];
         
         [UIView animateWithDuration:0.25 animations:^{
@@ -308,7 +332,7 @@
     KNTAMonthModel *monthModel = _dataArray[indexPath.section];
     KNTACalendarModel *model = monthModel.calendarArray[indexPath.row];
     
-    if (!model.day.length) {
+    if (!model.day.length || [self isOverToday:model] || !model.offMoment) {
         return;
     }
     
@@ -325,8 +349,8 @@
 
 - (void)shadowViewTapped:(UITapGestureRecognizer *)sender
 {
-    for (KNTADayTimeEditView *view in self.view.subviews) {
-        if ([view isKindOfClass:[KNTADayTimeEditView class]]) {
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[KNTADayTimeEditView class]] || [view isKindOfClass:[KNTANextDayEditView class]]) {
             [UIView animateWithDuration:0.25 animations:^{
                 view.frame = CGRectMake(0, kScreenSize.height + 150, kScreenSize.width, 150);
                 view.alpha = 0;
@@ -358,6 +382,24 @@
     if ([date compare:stadardDate] == NSOrderedAscending && !overTime) {
         isOver = YES;
     };
+    
+    return isOver;
+}
+
+- (BOOL)isOverToday:(KNTACalendarModel *)model
+{
+    BOOL isOver = NO;
+    
+    NSString *dateStr = [NSString stringWithFormat:@"%@-%@-%@", model.year, model.month, model.day];
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    format.dateFormat = @"yyyy-MM-dd";
+    
+    NSDate *desDate = [format dateFromString:dateStr];
+    NSDate *todayDate = [NSDate date];
+    
+    if ([todayDate compare:desDate] == NSOrderedAscending || !desDate) {
+        isOver = YES;
+    }
     
     return isOver;
 }

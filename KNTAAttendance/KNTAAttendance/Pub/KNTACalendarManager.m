@@ -12,6 +12,8 @@
 #import "KNTARecordManager.h"
 #import "KNTABasicSetting.h"
 #import "KNTAPubDefine.h"
+#import "KNTANextManager.h"
+#import "KNTANextDayData+CoreDataProperties.h"
 
 @interface KNTACalendarManager ()
 
@@ -277,11 +279,10 @@
     
     NSDateComponents *dateComponents = [self dateComponents:date];
     dateComponents.day = 0;
+    
+    long expectOverTime = 0;
+    NSString *expectMoment = [self nextMonthOffMomentOverTime:&expectOverTime];
     for (int i = 0; i < dayCount + index - 1; i++) {
-        //超过今天
-        if (dateComponents.year == _todayComponents.year && dateComponents.month == _todayComponents.month && (dateComponents.day + 1) > _todayComponents.day) {
-            break;
-        }
         
         KNTACalendarModel *model = [[KNTACalendarModel alloc] init];
         //空出当月第一天之前不顶格的部分
@@ -306,10 +307,61 @@
         model.holiday = [self holidayByDate:mutableDate];
         
         KNTADayData *dayData = [KNTARecordManager object:MAXBSIZE predicate:@"year=\'%@\' && month=\'%@\' && day=\'%@\'", year, month, day].firstObject;
-        model.upMoment = dayData.upMoment;
-        model.offMoment = dayData.offMonment;
-        model.overTime = [self archiveTime:dayData.overTime];
-        model.isInclude = dayData.isInclude;
+        
+        if (dateComponents.year == _todayComponents.year && dateComponents.month == _todayComponents.month && (dateComponents.day) > _todayComponents.day) {
+            //超过今天
+            if (![KNTABasicSetting sharedInstance].showNextTargetMoment ||
+                ![KNTABasicSetting sharedInstance].monthTargetOffMoment ||
+                [self compare:[KNTABasicSetting sharedInstance].monthTargetOffMoment desTime:[self monthOffMoment:[NSDate date]]]) {
+                
+                break;
+            }
+            
+            
+            KNTANextDayData *nextDayInfo = [KNTANextManager objectByPredicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", year, month, day].firstObject;
+            if (nextDayInfo.isRestday) {
+                
+            } else {
+                model.targetOffMoment = expectMoment;
+                NSInteger time = [self customOverTime:expectOverTime];
+                model.overTime = [self archiveTime:time];
+            }
+            
+        } else if (dateComponents.year == _todayComponents.year && dateComponents.month == _todayComponents.month && (dateComponents.day) == _todayComponents.day) {
+            //等于今天
+            model.upMoment = dayData.upMoment;
+            model.offMoment = dayData.offMonment;
+            if (model && model.offMoment) {
+                NSInteger time = [self customOverTime:dayData.overTime];
+                model.overTime = [self archiveTime:time];
+            } else if (model) {
+                
+                if (![KNTABasicSetting sharedInstance].showNextTargetMoment ||
+                    ![KNTABasicSetting sharedInstance].monthTargetOffMoment ||
+                    [self compare:[KNTABasicSetting sharedInstance].monthTargetOffMoment desTime:[self monthOffMoment:[NSDate date]]]) {
+                    
+                } else {
+                    KNTANextDayData *nextDayInfo = [KNTANextManager objectByPredicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", year, month, day].firstObject;
+                    if (nextDayInfo.isRestday) {
+                        
+                    } else {
+                        model.targetOffMoment = expectMoment;
+                        NSInteger time = [self customOverTime:expectOverTime];
+                        model.overTime = [self archiveTime:time];
+                    }
+                }
+            }
+            model.isInclude = dayData.isInclude;
+        } else {
+            //之前
+            model.upMoment = dayData.upMoment;
+            model.offMoment = dayData.offMonment;
+            if (model && model.offMoment) {
+                NSInteger time = [self customOverTime:dayData.overTime];
+                model.overTime = [self archiveTime:time];
+            }
+            model.isInclude = dayData.isInclude;
+        }
         
         [array addObject:model];
     }
@@ -354,6 +406,75 @@
 
 
 #pragma mark // 计算时间
+//当月剩余天的预计时间
+- (NSString *)nextMonthOffMomentOverTime:(long *)overTime
+{
+    NSDate *currentDate = [NSDate date];
+    
+    self.dateFormatter.dateFormat = @"yyyy";
+    NSString *year = [self.dateFormatter stringFromDate:currentDate];
+    self.dateFormatter.dateFormat = @"MM";
+    NSString *month = [self.dateFormatter stringFromDate:currentDate];
+    [self.dateFormatter setDateFormat:@"dd"];
+    NSString *day = [self.dateFormatter stringFromDate:currentDate];
+    
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *archiveDateStr = [NSString stringWithFormat:@"%@-%@-%@", year, month, day];
+    currentDate = [self.dateFormatter dateFromString:archiveDateStr];
+    
+    NSArray *dayDatas = [KNTARecordManager object:MAXBSIZE predicate:@"year = \'%@\' && month = \'%@\'", year, month];
+    KNTADayData *currentDayData = [KNTARecordManager object:MAXBSIZE predicate:@"year = \'%@\' && month = \'%@\' && day = %@", year, month, day].firstObject;
+    KNTANextDayData *todayEData = [KNTANextManager objectByPredicate:@"year = \'%@\' && month = \'%@\' && day = \'%@\'", year, month, day].firstObject;
+    
+    NSInteger index = 0; long totalTime = 0;
+    self.dateFormatter.dateFormat = @"HH:mm";
+    NSDate *standardOffDate = [self.dateFormatter dateFromString:kStartOverMoment];
+    
+    for (KNTADayData *dayData in dayDatas) {
+        if (!dayData.offMonment || !dayData.isInclude) {
+            continue;
+        }
+        index++;
+        
+        totalTime += dayData.overTime;
+    }
+    
+    NSString *expectMoment = [KNTABasicSetting sharedInstance].monthTargetOffMoment;
+    NSDate *expectDate = [self.dateFormatter dateFromString:expectMoment];
+    NSTimeInterval interval = [expectDate timeIntervalSinceDate:standardOffDate];
+    
+    NSUInteger dayCount = [self dayCountInMonth:currentDate];
+    NSInteger lastWorkDayCount = dayCount - [day intValue];
+    NSArray *nextInfos = [KNTANextManager objectByPredicate:@"year = \'%@\' && month = \'%@\'", year, month];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    for (KNTANextDayData *data in nextInfos) {
+        NSString *dateStr = [NSString stringWithFormat:@"%@-%@-%@", data.year, data.month, data.day];
+        NSDate *dataDate = [self.dateFormatter dateFromString:dateStr];
+        if ([currentDate compare:dataDate] == NSOrderedAscending && data.isRestday) {
+            --lastWorkDayCount;
+        }
+    }
+    
+    if ((!currentDayData || !currentDayData.offMonment) &&
+        (!todayEData || !todayEData.isRestday)) {
+        lastWorkDayCount += 1;
+    }
+    if (lastWorkDayCount <= 0) {
+        return nil;
+    }
+    NSInteger totalCount = lastWorkDayCount + index;
+    
+    long totalOverTime = interval * totalCount;
+    long lastAverOverTime = (totalOverTime - totalTime) / lastWorkDayCount;
+    if (overTime) {
+        *overTime = lastAverOverTime;
+    }
+    NSDate *lastDate = [standardOffDate dateByAddingTimeInterval:lastAverOverTime];
+    [self.dateFormatter setDateFormat:@"HH:mm"];
+    NSString *offMoment = [self.dateFormatter stringFromDate:lastDate];
+    
+    return offMoment;
+}
 
 - (NSString *)monthOffMoment:(NSDate *)currentDate
 {
@@ -366,7 +487,7 @@
     
     NSInteger index = 0; long totalTime = 0;
     self.dateFormatter.dateFormat = @"HH:mm";
-    NSDate *standardOffDate = [self.dateFormatter dateFromString:[KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment];
+    NSDate *standardOffDate = [self.dateFormatter dateFromString:kStartOverMoment];
     
     for (KNTADayData *dayData in dayDatas) {
         if (!dayData.offMonment || !dayData.isInclude) {
@@ -374,14 +495,14 @@
         }
         index++;
         
-        if (dayData.overTime > 0) {
+//        if (dayData.overTime > 0) {
             totalTime += dayData.overTime;
-        } else {
-            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
-            
-            long interval = [offDate timeIntervalSinceDate:standardOffDate];
-            totalTime += interval;
-        }
+//        } else {
+//            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
+//
+//            long interval = [offDate timeIntervalSinceDate:standardOffDate];
+//            totalTime += interval;
+//        }
     }
     
     if (index != 0) {
@@ -441,7 +562,7 @@
     
     NSInteger index = 0; long totalTime = 0;
     self.dateFormatter.dateFormat = @"HH:mm";
-    NSDate *standardOffDate = [self.dateFormatter dateFromString:[KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment];
+    NSDate *standardOffDate = [self.dateFormatter dateFromString:kStartOverMoment];
     
     for (KNTADayData *dayData in dayDatas) {
         if (!dayData.offMonment || !dayData.isInclude) {
@@ -449,14 +570,14 @@
         }
         index++;
         
-        if (dayData.overTime > 0) {
+//        if (dayData.overTime > 0) {
             totalTime += dayData.overTime;
-        } else {
-            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
-            
-            long interval = [offDate timeIntervalSinceDate:standardOffDate];
-            totalTime += interval;
-        }
+//        } else {
+//            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
+//
+//            long interval = [offDate timeIntervalSinceDate:standardOffDate];
+//            totalTime += interval;
+//        }
     }
     
     if (index != 0) {
@@ -515,7 +636,7 @@
     
     NSInteger index = 0; long totalTime = 0;
     self.dateFormatter.dateFormat = @"HH:mm";
-    NSDate *standardOffDate = [self.dateFormatter dateFromString:[KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment];
+    NSDate *standardOffDate = [self.dateFormatter dateFromString:kStartOverMoment];
     
     for (KNTADayData *dayData in dayDatas) {
         if (!dayData.offMonment || !dayData.isInclude) {
@@ -523,14 +644,14 @@
         }
         index++;
         
-        if (dayData.overTime > 0) {
+//        if (dayData.overTime > 0) {
             totalTime += dayData.overTime;
-        } else {
-            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
-            
-            long interval = [offDate timeIntervalSinceDate:standardOffDate];
-            totalTime += interval;
-        }
+//        } else {
+//            NSDate *offDate = [self.dateFormatter dateFromString:dayData.offMonment];
+//
+//            long interval = [offDate timeIntervalSinceDate:standardOffDate];
+//            totalTime += interval;
+//        }
     }
     
     if (index != 0) {
@@ -592,7 +713,9 @@
             continue;
         }
         index++;
-        totalTime += dayData.overTime;
+        if (dayData.overTime > 0) {
+            totalTime += dayData.overTime;
+        }
     }
     
     if (index != 0) {
@@ -621,5 +744,36 @@
     return overTime;
     
 }
+
+- (NSInteger)customOverTime:(NSInteger)time
+{
+    NSTimeInterval interval = 0;
+    self.dateFormatter.dateFormat = @"HH:mm";
+    NSString *str = [KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment;
+    NSDate *customStandardOverMoment = [self.dateFormatter dateFromString:str];
+    if (customStandardOverMoment) {
+        NSDate *standardOverMoment = [self.dateFormatter dateFromString:kStartOverMoment];
+        interval = [standardOverMoment timeIntervalSinceDate:customStandardOverMoment];
+    }
+    
+    NSInteger customTime = time + interval;
+    
+    return customTime;
+}
+
+- (BOOL)compare:(NSString *)time desTime:(NSString *)desTime
+{
+    BOOL isOver = NO;
+    
+    self.dateFormatter.dateFormat = @"HH:mm";
+    NSDate *date = [self.dateFormatter dateFromString:time];
+    NSDate *desDate = [self.dateFormatter dateFromString:desTime];
+    
+    if ([date compare:desDate] == NSOrderedAscending) {
+        isOver = YES;
+    }
+    return isOver;
+}
+
 
 @end

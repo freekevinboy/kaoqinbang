@@ -57,8 +57,11 @@ static KNTADBManager *manager = nil;
     format = [format stringByReplacingOccurrencesOfString:@"||" withString:@"or"];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:format];
-    request.predicate = predicate;
+    [request setReturnsObjectsAsFaults:NO];
+    if (format.length) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:format];
+        request.predicate = predicate;
+    }
     request.fetchLimit = limit;
     NSError *error = nil;
     NSArray *arr = [context executeFetchRequest:request error:&error];
@@ -91,7 +94,7 @@ static KNTADBManager *manager = nil;
 {
     __block NSManagedObjectContext *context = nil;
     if (![NSThread isMainThread]) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             context = ((AppDelegate *)[UIApplication sharedApplication].delegate).persistentContainer.viewContext;
         });
     } else {

@@ -26,6 +26,13 @@
 
 @property (strong, nonatomic) IBOutlet UISwitch *propmtWithoutUpTime;
 
+@property (strong, nonatomic) IBOutlet UITextField *expectHourTextF;
+
+@property (strong, nonatomic) IBOutlet UITextField *expectMinuteTextF;
+
+@property (strong, nonatomic) IBOutlet UISwitch *IsShowExpectSwitch;
+
+
 @end
 
 @implementation KNTASettingViewController
@@ -52,6 +59,16 @@
     
     NSNumber *propmt = K_ISPROMPTWITHOUTUPTIME_STORAGE;
     self.propmtWithoutUpTime.on = propmt.intValue == 1 || propmt == 0;
+    
+    NSString *expectMoment = K_MONTHTARGETOFFMOMENT_STORAGE;
+    self.expectHourTextF.text = [expectMoment componentsSeparatedByString:@":"].firstObject;
+    self.expectMinuteTextF.text = [expectMoment componentsSeparatedByString:@":"].lastObject;
+    
+    NSNumber *isShowExpect = K_ISSHOWNEXTTARGETMOMENT_STORAGE;
+    self.IsShowExpectSwitch.on = [isShowExpect boolValue];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(endEdit)];
+    [self.view addGestureRecognizer:tap];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -83,6 +100,13 @@
         K_SET_OFFMOMENT_STANDARD_STORAGE(str);
         [KNTABasicSetting sharedInstance].dayStandardOvertimeStartMoment = str;
     }
+    if ([_expectHourTextF.text integerValue] > 0 && [_expectHourTextF.text integerValue] < 24 &&
+        [_expectMinuteTextF.text integerValue] >= 0 && [_expectMinuteTextF.text integerValue] <= 59)
+    {
+        NSString *str = [NSString stringWithFormat:@"%@:%@", _expectHourTextF.text, _expectMinuteTextF.text];
+        K_SET_MONTHTARGETOFFMOMENT_STORAGE(str);
+        [KNTABasicSetting sharedInstance].monthTargetOffMoment = str;
+    }
     NSNumber *boolObj = [NSNumber numberWithBool:_includeSwitch.isOn];
     K_SET_MOMENTJOINACCOCULATE_STORAGE(boolObj);
     [KNTABasicSetting sharedInstance].doubleClickForEdit = _includeSwitch.isOn;
@@ -92,7 +116,16 @@
     K_SET_ISPROMPTWITHOUTUPTIME_STORAGE(isPrompt);
     [KNTABasicSetting sharedInstance].promptWithoutUptime = _propmtWithoutUpTime.isOn;
     
+    NSNumber *isShowExpect = [NSNumber numberWithBool:_IsShowExpectSwitch.isOn];
+    K_SET_ISSHOWNEXTTARGETMOMENT_STORAGE(isShowExpect);
+    [KNTABasicSetting sharedInstance].showNextTargetMoment = _IsShowExpectSwitch.isOn;
+    
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)endEdit
+{
+    [self.view endEditing:YES];
 }
 
 @end

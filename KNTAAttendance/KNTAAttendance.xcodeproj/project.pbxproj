@@ -19,8 +19,6 @@
 		0A2BDB6720F7519C000BD05B /* KNTACalendarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BDB6320F7519C000BD05B /* KNTACalendarController.m */; };
 		0A2BDB7620F76D71000BD05B /* KNTADBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BDB7520F76D71000BD05B /* KNTADBManager.m */; };
 		0A2BDB7920F77857000BD05B /* KNTARecordManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BDB7820F77857000BD05B /* KNTARecordManager.m */; };
-		0A2BDB8420F9FE98000BD05B /* KNTADayData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BDB8220F9FE98000BD05B /* KNTADayData+CoreDataClass.m */; };
-		0A2BDB8520F9FE98000BD05B /* KNTADayData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BDB8320F9FE98000BD05B /* KNTADayData+CoreDataProperties.m */; };
 		0A54A5B520FC41CD003486C7 /* KNTADayTimeEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A54A5B420FC41CD003486C7 /* KNTADayTimeEditView.m */; };
 		0A54A5B720FC41ED003486C7 /* KNTADayTimeEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A54A5B620FC41ED003486C7 /* KNTADayTimeEditView.xib */; };
 		0A7A1F8B21492D0C00535A93 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A7A1F8A21492D0C00535A93 /* SystemConfiguration.framework */; };
@@ -33,6 +31,13 @@
 		0AA0375E2108770D00E2AFA6 /* KNTASettingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AA0375D2108770D00E2AFA6 /* KNTASettingViewController.storyboard */; };
 		0AA0376221095A1100E2AFA6 /* launch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA0376121095A1000E2AFA6 /* launch@2x.png */; };
 		0AA037662109700700E2AFA6 /* KNTABasicSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA037652109700700E2AFA6 /* KNTABasicSetting.m */; };
+		0AC4878521CB9AD1004E9D47 /* KNTANextDayEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC4878421CB9AD1004E9D47 /* KNTANextDayEditView.m */; };
+		0AC4878721CB9B33004E9D47 /* KNTANextDayEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC4878621CB9B33004E9D47 /* KNTANextDayEditView.xib */; };
+		0AC4879D21CC8A1E004E9D47 /* KNTANextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC4879C21CC8A1E004E9D47 /* KNTANextManager.m */; };
+		0AC487BA21CCE9EC004E9D47 /* KNTANextDayData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC487B421CCE9EB004E9D47 /* KNTANextDayData+CoreDataClass.m */; };
+		0AC487BB21CCE9EC004E9D47 /* KNTANextDayData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC487B521CCE9EB004E9D47 /* KNTANextDayData+CoreDataProperties.m */; };
+		0AC487BC21CCE9EC004E9D47 /* KNTADayData+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC487B621CCE9EB004E9D47 /* KNTADayData+CoreDataProperties.m */; };
+		0AC487BD21CCE9EC004E9D47 /* KNTADayData+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC487B721CCE9EB004E9D47 /* KNTADayData+CoreDataClass.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,10 +62,6 @@
 		0A2BDB7520F76D71000BD05B /* KNTADBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTADBManager.m; sourceTree = "<group>"; };
 		0A2BDB7720F77857000BD05B /* KNTARecordManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTARecordManager.h; sourceTree = "<group>"; };
 		0A2BDB7820F77857000BD05B /* KNTARecordManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTARecordManager.m; sourceTree = "<group>"; };
-		0A2BDB8020F9FE98000BD05B /* KNTADayData+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "KNTADayData+CoreDataProperties.h"; path = "KNTAAttendance/KNTADayData+CoreDataProperties.h"; sourceTree = "<group>"; };
-		0A2BDB8120F9FE98000BD05B /* KNTADayData+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "KNTADayData+CoreDataClass.h"; path = "KNTAAttendance/KNTADayData+CoreDataClass.h"; sourceTree = "<group>"; };
-		0A2BDB8220F9FE98000BD05B /* KNTADayData+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "KNTADayData+CoreDataClass.m"; path = "KNTAAttendance/KNTADayData+CoreDataClass.m"; sourceTree = "<group>"; };
-		0A2BDB8320F9FE98000BD05B /* KNTADayData+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "KNTADayData+CoreDataProperties.m"; path = "KNTAAttendance/KNTADayData+CoreDataProperties.m"; sourceTree = "<group>"; };
 		0A54A5B320FC41CD003486C7 /* KNTADayTimeEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTADayTimeEditView.h; sourceTree = "<group>"; };
 		0A54A5B420FC41CD003486C7 /* KNTADayTimeEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTADayTimeEditView.m; sourceTree = "<group>"; };
 		0A54A5B620FC41ED003486C7 /* KNTADayTimeEditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KNTADayTimeEditView.xib; sourceTree = "<group>"; };
@@ -78,6 +79,19 @@
 		0AA0376321096C6200E2AFA6 /* KNTAPubDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTAPubDefine.h; sourceTree = "<group>"; };
 		0AA037642109700700E2AFA6 /* KNTABasicSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTABasicSetting.h; sourceTree = "<group>"; };
 		0AA037652109700700E2AFA6 /* KNTABasicSetting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTABasicSetting.m; sourceTree = "<group>"; };
+		0AC4878321CB9AD1004E9D47 /* KNTANextDayEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTANextDayEditView.h; sourceTree = "<group>"; };
+		0AC4878421CB9AD1004E9D47 /* KNTANextDayEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTANextDayEditView.m; sourceTree = "<group>"; };
+		0AC4878621CB9B33004E9D47 /* KNTANextDayEditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KNTANextDayEditView.xib; sourceTree = "<group>"; };
+		0AC4879B21CC8A1E004E9D47 /* KNTANextManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KNTANextManager.h; sourceTree = "<group>"; };
+		0AC4879C21CC8A1E004E9D47 /* KNTANextManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KNTANextManager.m; sourceTree = "<group>"; };
+		0AC487B221CCE9EB004E9D47 /* KNTADayData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KNTADayData+CoreDataProperties.h"; sourceTree = "<group>"; };
+		0AC487B321CCE9EB004E9D47 /* KNTADayData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KNTADayData+CoreDataClass.h"; sourceTree = "<group>"; };
+		0AC487B421CCE9EB004E9D47 /* KNTANextDayData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KNTANextDayData+CoreDataClass.m"; sourceTree = "<group>"; };
+		0AC487B521CCE9EB004E9D47 /* KNTANextDayData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KNTANextDayData+CoreDataProperties.m"; sourceTree = "<group>"; };
+		0AC487B621CCE9EB004E9D47 /* KNTADayData+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KNTADayData+CoreDataProperties.m"; sourceTree = "<group>"; };
+		0AC487B721CCE9EB004E9D47 /* KNTADayData+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KNTADayData+CoreDataClass.m"; sourceTree = "<group>"; };
+		0AC487B821CCE9EB004E9D47 /* KNTANextDayData+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KNTANextDayData+CoreDataClass.h"; sourceTree = "<group>"; };
+		0AC487B921CCE9EB004E9D47 /* KNTANextDayData+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KNTANextDayData+CoreDataProperties.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,10 +112,7 @@
 		0A2BDB3A20F7517D000BD05B = {
 			isa = PBXGroup;
 			children = (
-				0A2BDB8020F9FE98000BD05B /* KNTADayData+CoreDataProperties.h */,
-				0A2BDB8120F9FE98000BD05B /* KNTADayData+CoreDataClass.h */,
-				0A2BDB8220F9FE98000BD05B /* KNTADayData+CoreDataClass.m */,
-				0A2BDB8320F9FE98000BD05B /* KNTADayData+CoreDataProperties.m */,
+				0AC487B121CCE9EB004E9D47 /* DB */,
 				0A2BDB4520F7517D000BD05B /* KNTAAttendance */,
 				0A2BDB4420F7517D000BD05B /* Products */,
 				0A7A1F8721492D0500535A93 /* Frameworks */,
@@ -132,6 +143,9 @@
 				0A54A5B320FC41CD003486C7 /* KNTADayTimeEditView.h */,
 				0A54A5B420FC41CD003486C7 /* KNTADayTimeEditView.m */,
 				0A54A5B620FC41ED003486C7 /* KNTADayTimeEditView.xib */,
+				0AC4878321CB9AD1004E9D47 /* KNTANextDayEditView.h */,
+				0AC4878421CB9AD1004E9D47 /* KNTANextDayEditView.m */,
+				0AC4878621CB9B33004E9D47 /* KNTANextDayEditView.xib */,
 				0A2BDB4C20F7517D000BD05B /* Main.storyboard */,
 				0A2BDB5220F7517E000BD05B /* Assets.xcassets */,
 				0A2BDB5420F7517E000BD05B /* LaunchScreen.storyboard */,
@@ -164,6 +178,22 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		0AC487B121CCE9EB004E9D47 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				0AC487B221CCE9EB004E9D47 /* KNTADayData+CoreDataProperties.h */,
+				0AC487B321CCE9EB004E9D47 /* KNTADayData+CoreDataClass.h */,
+				0AC487B421CCE9EB004E9D47 /* KNTANextDayData+CoreDataClass.m */,
+				0AC487B521CCE9EB004E9D47 /* KNTANextDayData+CoreDataProperties.m */,
+				0AC487B621CCE9EB004E9D47 /* KNTADayData+CoreDataProperties.m */,
+				0AC487B721CCE9EB004E9D47 /* KNTADayData+CoreDataClass.m */,
+				0AC487B821CCE9EB004E9D47 /* KNTANextDayData+CoreDataClass.h */,
+				0AC487B921CCE9EB004E9D47 /* KNTANextDayData+CoreDataProperties.h */,
+			);
+			name = DB;
+			path = KNTAAttendance/DB;
+			sourceTree = "<group>";
+		};
 		0AD02D6E2113209700AD5444 /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +204,8 @@
 				0A2BDB7820F77857000BD05B /* KNTARecordManager.m */,
 				0A2BDB5F20F7519C000BD05B /* KNTAMonthModel.h */,
 				0A2BDB6120F7519C000BD05B /* KNTAMonthModel.m */,
+				0AC4879B21CC8A1E004E9D47 /* KNTANextManager.h */,
+				0AC4879C21CC8A1E004E9D47 /* KNTANextManager.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -250,6 +282,7 @@
 			files = (
 				0AA037512108688300E2AFA6 /* setting@2x.png in Resources */,
 				0A54A5B720FC41ED003486C7 /* KNTADayTimeEditView.xib in Resources */,
+				0AC4878721CB9B33004E9D47 /* KNTANextDayEditView.xib in Resources */,
 				0A2BDB5620F7517E000BD05B /* LaunchScreen.storyboard in Resources */,
 				0AA037522108688300E2AFA6 /* setting@3x.png in Resources */,
 				0A2BDB5320F7517E000BD05B /* Assets.xcassets in Resources */,
@@ -266,20 +299,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A2BDB8420F9FE98000BD05B /* KNTADayData+CoreDataClass.m in Sources */,
 				0A2BDB7920F77857000BD05B /* KNTARecordManager.m in Sources */,
 				0A2BDB6520F7519C000BD05B /* KNTAMonthModel.m in Sources */,
+				0AC4878521CB9AD1004E9D47 /* KNTANextDayEditView.m in Sources */,
 				0A2BDB6620F7519C000BD05B /* KNTACalendarManager.m in Sources */,
+				0AC487BD21CCE9EC004E9D47 /* KNTADayData+CoreDataClass.m in Sources */,
 				0A2BDB5120F7517D000BD05B /* KNTAAttendance.xcdatamodeld in Sources */,
 				0A2BDB4B20F7517D000BD05B /* ViewController.m in Sources */,
 				0A2BDB6720F7519C000BD05B /* KNTACalendarController.m in Sources */,
 				0A2BDB5920F7517F000BD05B /* main.m in Sources */,
 				0A54A5B520FC41CD003486C7 /* KNTADayTimeEditView.m in Sources */,
+				0AC487BC21CCE9EC004E9D47 /* KNTADayData+CoreDataProperties.m in Sources */,
+				0AC4879D21CC8A1E004E9D47 /* KNTANextManager.m in Sources */,
 				0AA037662109700700E2AFA6 /* KNTABasicSetting.m in Sources */,
-				0A2BDB8520F9FE98000BD05B /* KNTADayData+CoreDataProperties.m in Sources */,
 				0A2BDB4820F7517D000BD05B /* AppDelegate.m in Sources */,
+				0AC487BA21CCE9EC004E9D47 /* KNTANextDayData+CoreDataClass.m in Sources */,
 				0AA0375921086AC500E2AFA6 /* KNTASettingViewController.m in Sources */,
 				0A2BDB7620F76D71000BD05B /* KNTADBManager.m in Sources */,
+				0AC487BB21CCE9EC004E9D47 /* KNTANextDayData+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

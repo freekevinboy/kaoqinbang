@@ -225,10 +225,6 @@ static int maxCount = 0;
     NSString *upDateString = [NSString stringWithFormat:@"%@-%@-%@ %@", dayData.year, dayData.month, dayData.day, kStartOverMoment];
     NSDate *upDate = [recordManager.dateFormatter dateFromString:upDateString];
     
-    if ([upDate compare:offDate] != NSOrderedAscending) {
-        return 0;
-    }
-    
     NSTimeInterval interval = [offDate timeIntervalSinceDate:upDate];
     return interval;
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="KNTADayData" representedClassName="KNTADayData" syncable="YES">
         <attribute name="day" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isInclude" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -10,7 +10,14 @@
         <attribute name="upMoment" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="KNTANextDayData" representedClassName="KNTANextDayData" syncable="YES">
+        <attribute name="day" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isRestday" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="month" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="KNTADayData" positionX="-63" positionY="-18" width="128" height="165"/>
+        <element name="KNTANextDayData" positionX="-63" positionY="45" width="128" height="105"/>
     </elements>
 </model>

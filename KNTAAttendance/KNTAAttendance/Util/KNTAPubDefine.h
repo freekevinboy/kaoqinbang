@@ -13,6 +13,10 @@
 //标准开始计算加班的时间
 #define kStartOverMoment @"19:00"
 
+
+
+
+
 //每天的红线下班时间_key
 #define K_KEY_OFFMOMENT_RED_DAY @"K_KEY_OFFMOMENT_RED_DAY"
 
@@ -25,8 +29,23 @@
 //当天时间是否参与计算_key
 #define K_KEY_MOMENTJOINACCOCULATE @"K_KEY_MOMENTJOINACCOCULATE"
 
-//当天没有上班时间是否进行提示
+//当天没有上班时间是否进行提示_key
 #define K_KEY_ISPROMPTWITHOUTUPTIME @"K_ISPROMPTWITHOUTUPTIME_STORAGE"
+
+//是否展示以后的能达到预期平均下班时间的每天的下班时间_key
+#define K_KEY_ISSHOWNEXTTARGETMOMENT @"K_ISSHOWNEXTTARGETMOMENT_STORAGE"
+
+//当月预期下班时间_key
+#define K_KEY_MONTHTARGETOFFMOMENT @"K_MONTHTARGETOFFMOMENT_STORAGE"
+
+
+
+
+
+
+
+
+
 
 //每天的红线下班时间
 #define K_OFFMOMENT_RED_DAY_STORAGE [[NSUserDefaults standardUserDefaults] objectForKey:K_KEY_OFFMOMENT_RED_DAY];
@@ -54,4 +73,15 @@
 #define kSetStartTime if (![[NSUserDefaults standardUserDefaults] objectForKey:@"KNTAAttendanceStartTime"]) {\
                             [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"KNTAAttendanceStartTime"];\
                         }
+
+//是否展示以后的能达到预期平均下班时间的每天的下班时间
+#define K_ISSHOWNEXTTARGETMOMENT_STORAGE [[NSUserDefaults standardUserDefaults] objectForKey:K_KEY_ISSHOWNEXTTARGETMOMENT];
+#define K_SET_ISSHOWNEXTTARGETMOMENT_STORAGE(obj) [[NSUserDefaults standardUserDefaults] setObject:obj forKey:K_KEY_ISSHOWNEXTTARGETMOMENT];
+
+
+//当月预期下班时间
+#define K_MONTHTARGETOFFMOMENT_STORAGE [[NSUserDefaults standardUserDefaults] objectForKey:K_KEY_MONTHTARGETOFFMOMENT];
+#define K_SET_MONTHTARGETOFFMOMENT_STORAGE(obj) [[NSUserDefaults standardUserDefaults] setObject:obj forKey:K_KEY_MONTHTARGETOFFMOMENT];
+
+
 

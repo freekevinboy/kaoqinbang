@@ -36,6 +36,9 @@ static KNTABasicSetting *setting = nil;
         _doubleClickForEdit = [obj boolValue];
         id propmtObj = K_ISPROMPTWITHOUTUPTIME_STORAGE;
         _promptWithoutUptime = [propmtObj intValue] == 1 || !propmtObj;
+        id obj1 = K_ISSHOWNEXTTARGETMOMENT_STORAGE;
+        _showNextTargetMoment = [obj1 boolValue];
+        _monthTargetOffMoment = K_MONTHTARGETOFFMOMENT_STORAGE;
         
     }
     return self;

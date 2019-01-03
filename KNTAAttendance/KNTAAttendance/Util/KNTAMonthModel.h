@@ -53,4 +53,6 @@
 
 @property (assign, nonatomic) BOOL isInclude;
 
+@property (strong, nonatomic) NSString *targetOffMoment;
+
 @end
